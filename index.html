@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌿갸루 생태환경 퀴즈🌈</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: "Comic Sans MS", sans-serif;
+    overflow: hidden;
+    color: #222;
+    background: linear-gradient(135deg, #ffc0cb, #ffe4e1, #fffacd);
+    background-size: 400% 400%;
+    animation: bgmove 10s ease infinite;
+  }
+
+  @keyframes bgmove {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+  }
+
+  .leopard {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://i.imgur.com/vULf3gU.png');
+    background-size: cover;
+    opacity: 0.25;
+    z-index: -1;
+  }
+
+  .container {
+    max-width: 700px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.85);
+    border: 5px solid hotpink;
+    border-radius: 25px;
+    box-shadow: 0 0 30px gold;
+    padding: 30px;
+    margin-top: 5vh;
+    text-align: center;
+  }
+
+  h1 {
+    color: hotpink;
+    font-size: 2.5em;
+    text-shadow: 2px 2px 8px gold;
+  }
+
+  .question {
+    font-size: 1.3em;
+    margin-bottom: 15px;
+    color: #333;
+    font-weight: bold;
+  }
+
+  .options button {
+    display: block;
+    width: 90%;
+    margin: 8px auto;
+    padding: 10px;
+    border: 2px solid hotpink;
+    border-radius: 10px;
+    background-color: #fff;
+    color: #444;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .options button:hover {
+    background-color: #ffb6c1;
+    color: white;
+    transform: scale(1.05);
+  }
+
+  .next-btn {
+    background: hotpink;
+    color: white;
+    font-size: 1.2em;
+    padding: 10px 25px;
+    border-radius: 15px;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    box-shadow: 0 0 10px gold;
+  }
+
+  .next-btn:hover {
+    background: gold;
+    color: hotpink;
+  }
+
+  .result {
+    font-size: 1.4em;
+    color: hotpink;
+    font-weight: bold;
+    text-shadow: 1px 1px 5px gold;
+  }
+
+  /* 반짝이 효과 */
+  .sparkle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: gold;
+    border-radius: 50%;
+    animation: sparkle 1s linear infinite;
+    opacity: 0;
+  }
+
+  @keyframes sparkle {
+    0% { transform: scale(0); opacity: 0.8; }
+    50% { transform: scale(1.5); opacity: 1; }
+    100% { transform: scale(0); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+  <audio id="bgm" autoplay loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/23/audio_2d6b75e14d.mp3?filename=sunny-day-141197.mp3" type="audio/mp3">
+  </audio>
+
+  <div class="leopard"></div>
+  <div class="container">
+    <h1>🌈 갸루 생태환경 퀴즈 🐆</h1>
+    <div id="quiz">
+      <div id="question" class="question"></div>
+      <div id="options" class="options"></div>
+      <button id="next-btn" class="next-btn">다음 ➡️</button>
+    </div>
+    <div id="result" class="result" style="display:none;"></div>
+  </div>
+
+  <script>
+    const quizData = [
+      {q: "1️⃣ 나무가 이산화탄소를 흡수하고 내뿜는 기체는?", options: ["산소", "질소", "메탄", "이산화탄소"], a: 0},
+      {q: "2️⃣ 지구 온난화의 주요 원인은?", options: ["온실가스 증가", "비 많이 오기", "달의 거리 변화", "나무 많아짐"], a: 0},
+      {q: "3️⃣ 플라스틱이 바다로 가면 피해를 받는 것은?", options: ["물고기", "별", "달", "하늘"], a: 0},
+      {q: "4️⃣ 재활용이란?", options: ["다시 사용하는 것", "버리는 것", "태우는 것", "묻는 것"], a: 0},
+      {q: "5️⃣ 숲이 사라지면 가장 먼저 영향을 받는 것은?", options: ["동식물", "자동차", "로봇", "게임기"], a: 0},
+      {q: "6️⃣ 태양에너지는 어떤 에너지일까?", options: ["재생 가능 에너지", "고갈되는 에너지", "나쁜 에너지", "없음"], a: 0},
+      {q: "7️⃣ 지구의 생명체가 함께 어울려 사는 걸 뭐라 할까?", options: ["생태계", "도시", "나라", "학교"], a: 0},
+      {q: "8️⃣ 바다 거북이 비닐을 먹는 이유는?", options: ["해파리로 착각해서", "냄새가 좋아서", "사람이 줘서", "게임하려고"], a: 0},
+      {q: "9️⃣ 쓰레기를 줄이기 위한 방법이 아닌 것은?", options: ["분리수거", "재사용", "더 사기", "재활용"], a: 2},
+      {q: "🔟 지구를 지키기 위해 우리가 해야 할 일은?", options: ["에너지 절약", "물 낭비", "쓰레기 버리기", "불 끄지 않기"], a: 0}
+    ];
+
+    let currentQ = 0;
+    let score = 0;
+    const questionEl = document.getElementById("question");
+    const optionsEl = document.getElementById("options");
+    const nextBtn = document.getElementById("next-btn");
+    const resultEl = document.getElementById("result");
+
+    function sparkleEffect() {
+      const sparkle = document.createElement("div");
+      sparkle.classList.add("sparkle");
+      sparkle.style.left = Math.random() * window.innerWidth + "px";
+      sparkle.style.top = Math.random() * window.innerHeight + "px";
+      document.body.appendChild(sparkle);
+      setTimeout(() => sparkle.remove(), 1000);
+    }
+
+    setInterval(sparkleEffect, 300);
+
+    function loadQuestion() {
+      const q = quizData[currentQ];
+      questionEl.textContent = q.q;
+      optionsEl.innerHTML = "";
+      q.options.forEach((opt, i) => {
+        const btn = document.createElement("button");
+        btn.textContent = opt;
+        btn.onclick = () => selectAnswer(i);
+        optionsEl.appendChild(btn);
+      });
+    }
+
+    function selectAnswer(i) {
+      const correct = quizData[currentQ].a;
+      if (i === correct) {
+        score++;
+        alert("💖 정답이야! 갸루 파워 업✨");
+      } else {
+        alert("😢 아쉽! 다시 생각해봐~");
+      }
+    }
+
+    nextBtn.addEventListener("click", () => {
+      currentQ++;
+      if (currentQ < quizData.length) {
+        loadQuestion();
+      } else {
+        showResult();
+      }
+    });
+
+    function showResult() {
+      document.getElementById("quiz").style.display = "none";
+      resultEl.style.display = "block";
+
+      let message = "";
+      if (score === 10) message = "👑 완벽해! 갸루 지구여신 인정 💖";
+      else if (score >= 7) message = "🌸 대단해! 지구사랑 갸루 인증!";
+      else if (score >= 4) message = "🌿 괜찮아~ 조금만 더 공부하자!";
+      else message = "😢 그래도 노력했어! 다음엔 더 잘할 수 있어!";
+
+      resultEl.innerHTML = `🎉 퀴즈 완료! 당신의 점수는 <span style="color:gold">${score} / ${quizData.length}</span> 이에요 💅<br><br>${message}`;
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>
